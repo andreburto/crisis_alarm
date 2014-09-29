@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CRISIS ALARM</title>
+<script type="text/javascript" src="jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+
+function goAlarm(text) {
+    var word = "sound";
+    if (text == "QUIET") { word = "clear"; }
+    var url = "control.php?action="+word;
+    $.get(url, function(data){
+        if (data == "SOUNDING") {
+            $("#btnAlarm").css("background-color", "#ff3333");
+            $("#btnAlarm").val("QUIET");
+        }
+        else if (data == "CLEAR") {
+            $("#btnAlarm").css("background-color", "#33ff33");
+            $("#btnAlarm").val("ALARM");
+        }
+        else {
+            alert(data);
+        }
+    });
+}
+
+// ]]>
+</script>
+</head>
+<body style="margin:0px;padding:10px;text-align:center;">
+<form style="margin:0px;padding:0px;text-align:center;" id="frmMain" action="index.html">
+    <div style="margin:auto;width:320px;height:320px;border:0px;">
+        <input type="submit" value="CHECKING" id="btnAlarm" style="width:100%;height:100%;font-size:28pt;background-color:#ff3333;" />
+    </div>
+</form>
+<script type="text/javascript">
+// <![CDATA[
+
+$(document).ready(function(){
+    $.get("control.php?action=check", function(data) {
+        if (data == "OFF") {
+            $("#btnAlarm").css("background-color", "#33ff33");
+            $("#btnAlarm").val("ALARM");
+        } else {
+            $("#btnAlarm").css("background-color", "#ff3333");
+            $("#btnAlarm").val("QUIET");
+        }
+    });
+    
+    $("#frmMain").submit(function(event) {
+        goAlarm($("#btnAlarm").val());
+        event.preventDefault();
+    });
+});
+
+// ]]>
+</script>
+</body>
+</html> 
